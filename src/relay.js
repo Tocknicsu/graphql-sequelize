@@ -317,7 +317,7 @@ export function sequelizeConnection({
         fullCount = 0;
       }
 
-      if ((args.first || args.last) && (fullCount === null || fullCount === undefined)) {
+      if ((args.first || args.last || args.pageSize) && (fullCount === null || fullCount === undefined)) {
         // In case of `OVER()` is not available, we need to get the full count from a second query.
         const options = await Promise.resolve(before({
           where: argsToWhere(args)
@@ -351,6 +351,10 @@ export function sequelizeConnection({
         if (args.last) {
           [hasNextPage, hasPreviousPage] = [hasPreviousPage, hasNextPage];
         }
+      }
+      if (args.pageSize) {
+        hasNextPage = args.page * args.pageSize < fullCount;
+        hasPreviousPage = args.page > 1;
       }
 
       return after({
