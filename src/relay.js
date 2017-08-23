@@ -114,6 +114,15 @@ export function sequelizeConnection({
   edgeFields,
   where
 }) {
+  connectionFields = {
+    total: {
+      type: GraphQLInt,
+    },
+    totalPage: {
+      type: GraphQLInt,
+    },
+    ...connectionFields
+  };
   const {
     edgeType,
     connectionType
