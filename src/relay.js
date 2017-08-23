@@ -114,15 +114,6 @@ export function sequelizeConnection({
   edgeFields,
   where
 }) {
-  connectionFields = {
-    total: {
-      type: GraphQLInt,
-      resolve: (options) => {
-        return options.fullCount;
-      }
-    },
-    ...connectionFields
-  };
   const {
     edgeType,
     connectionType
@@ -371,7 +362,7 @@ export function sequelizeConnection({
           hasNextPage: hasNextPage,
           hasPreviousPage: hasPreviousPage,
         },
-        fullCount,
+        total: fullCount,
         totalPage
       }, args, context, info);
     }
