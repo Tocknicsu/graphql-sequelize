@@ -7,6 +7,7 @@ import {
 } from 'graphql-relay';
 
 import {
+  GraphQLInt,
   GraphQLList,
   GraphQLEnumType
 } from 'graphql';
@@ -113,6 +114,15 @@ export function sequelizeConnection({
   edgeFields,
   where
 }) {
+  connectionFields = {
+    total: {
+      type: GraphQLInt,
+      resolve: (options) => {
+        return options.fullCount;
+      }
+    },
+    ...connectionFields
+  };
   const {
     edgeType,
     connectionType
@@ -143,6 +153,12 @@ export function sequelizeConnection({
     ...connectionArgs,
     orderBy: {
       type: new GraphQLList(orderByEnum)
+    },
+    page: {
+      type: GraphQLInt
+    },
+    pageSize: {
+      type: GraphQLInt
     }
   };
 
@@ -220,6 +236,9 @@ export function sequelizeConnection({
       if (args.first || args.last) {
         options.limit = parseInt(args.first || args.last, 10);
       }
+      if (args.pageSize) {
+        options.limit = args.pageSize;
+      }
       if (!args.orderBy) {
         args.orderBy = [orderByEnum._values[0].value];
       } else if (typeof args.orderBy === 'string') {
@@ -268,6 +287,9 @@ export function sequelizeConnection({
         let startIndex = Number(cursor.index);
 
         if (startIndex >= 0) options.offset = startIndex + 1;
+      }
+      if (args.page) {
+        options.offset = (args.page - 1) * args.pageSize;
       }
       options.attributes = _.uniq(options.attributes);
       return before(options, args, context, info);
