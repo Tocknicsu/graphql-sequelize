@@ -21,6 +21,18 @@ import {
 import _ from 'lodash';
 import simplifyAST from './simplifyAST';
 
+const totalInfo = new GraphQLObjectType({
+  name: 'totalInfo',
+  fields: {
+    total: {
+      type: GraphQLInt
+    },
+    totalPage: {
+      type: GraphQLInt
+    }
+  }
+})
+
 export class NodeTypeMapper {
   constructor() {
     this.map = { };
@@ -117,17 +129,7 @@ export function sequelizeConnection({
 }) {
   connectionFields = {
     totalInfo: {
-      type: new GraphQLObjectType({
-        name: 'totalInfo',
-        fields: {
-          total: {
-            type: GraphQLInt
-          },
-          totalPage: {
-            type: GraphQLInt
-          }
-        }
-      })
+      type: totalInfo
     },
     ...connectionFields
   };
