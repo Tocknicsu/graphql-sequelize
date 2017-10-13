@@ -115,11 +115,18 @@ export function sequelizeConnection({
   where
 }) {
   connectionFields = {
-    total: {
-      type: GraphQLInt,
-    },
-    totalPage: {
-      type: GraphQLInt,
+    totalInfo: {
+      type: new GraphQLObjectType({
+        name: 'totalInfo',
+        fields: {
+          total: {
+            type: GraphQLInt
+          },
+          totalPage: {
+            type: GraphQLInt
+          }
+        }
+      })
     },
     ...connectionFields
   };
@@ -373,8 +380,10 @@ export function sequelizeConnection({
           hasNextPage: hasNextPage,
           hasPreviousPage: hasPreviousPage,
         },
-        total: fullCount,
-        totalPage
+        totalInfo: {
+          total: fullCount,
+          totalPage
+        }
       }, args, context, info);
     }
   });
