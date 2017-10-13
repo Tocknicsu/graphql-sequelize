@@ -9,7 +9,8 @@ import {
 import {
   GraphQLInt,
   GraphQLList,
-  GraphQLEnumType
+  GraphQLEnumType,
+  GraphQLObjectType
 } from 'graphql';
 
 import {
