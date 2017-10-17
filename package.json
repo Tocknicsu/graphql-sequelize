@@ -1,6 +1,6 @@
 {
   "name": "graphql-sequelize",
-  "version": "5.4.8",
+  "version": "5.4.9",
   "description": "GraphQL & Relay for MySQL & Postgres via Sequelize",
   "main": "lib/index.js",
   "options": {
@@ -41,6 +41,7 @@
   },
   "homepage": "https://github.com/mickhansen/graphql-sequelize",
   "dependencies": {
+    "dataloader-sequelize": "https://github.com/Tocknicsu/dataloader-sequelize.git",
     "bluebird": "^3.4.0",
     "invariant": "2.2.1",
     "lodash": "^4.0.0"
@@ -58,7 +59,6 @@
     "babel-register": "^6.9.0",
     "chai": "^3.0.0",
     "chai-as-promised": "^5.1.0",
-    "dataloader-sequelize": "https://github.com/Tocknicsu/dataloader-sequelize.git",
     "eslint": "^1.7.3",
     "express": "^4.14.0",
     "express-graphql": "^0.5.4",
