@@ -31,7 +31,7 @@ const totalInfo = new GraphQLObjectType({
       type: GraphQLInt
     }
   }
-})
+});
 
 export class NodeTypeMapper {
   constructor() {
@@ -128,11 +128,11 @@ export function sequelizeConnection({
   where
 }) {
   if (!connectionFields) {
-    connectionFields = {}
+    connectionFields = {};
   }
   connectionFields.totalInfo = {
     type: totalInfo
-  }
+  };
   const {
     edgeType,
     connectionType
@@ -328,7 +328,7 @@ export function sequelizeConnection({
         fullCount = 0;
       }
 
-      if (((args.first || args.last) && (fullCount === null || fullCount === undefined)) || args.pageSize) {
+      if (args.pageSize || (args.first || args.last) && (fullCount === null || fullCount === undefined)) {
         // In case of `OVER()` is not available, we need to get the full count from a second query.
         const options = await Promise.resolve(before({
           where: argsToWhere(args)
@@ -347,7 +347,7 @@ export function sequelizeConnection({
 
       let hasNextPage = false;
       let hasPreviousPage = false;
-      let totalPage = 0
+      let totalPage = 0;
       if (args.first || args.last) {
         const count = parseInt(args.first || args.last, 10);
         let index = cursor ? Number(cursor.index) : null;
@@ -363,12 +363,12 @@ export function sequelizeConnection({
         if (args.last) {
           [hasNextPage, hasPreviousPage] = [hasPreviousPage, hasNextPage];
         }
-        totalPage = Math.ceil(fullCount / (args.first || args.last))
+        totalPage = Math.ceil(fullCount / (args.first || args.last));
       }
       if (args.pageSize) {
         hasNextPage = args.page * args.pageSize < fullCount;
         hasPreviousPage = args.page > 1;
-        totalPage = Math.ceil(fullCount / args.pageSize)
+        totalPage = Math.ceil(fullCount / args.pageSize);
       }
 
       return after({
