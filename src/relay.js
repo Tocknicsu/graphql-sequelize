@@ -127,12 +127,12 @@ export function sequelizeConnection({
   edgeFields,
   where
 }) {
-  connectionFields = {
-    totalInfo: {
-      type: totalInfo
-    },
-    ...connectionFields
-  };
+  if (!connectionFields) {
+    connectionFields = {}
+  }
+  connectionFields.totalInfo = {
+    type: totalInfo
+  }
   const {
     edgeType,
     connectionType
@@ -321,15 +321,14 @@ export function sequelizeConnection({
 
       let firstEdge = edges[0];
       let lastEdge = edges[edges.length - 1];
-      let fullCount = null;
       /* wingemerald: force to count */
-      // let fullCount = values[0] && values[0].dataValues.full_count && parseInt(values[0].dataValues.full_count, 10);
-      //
-      // if (!values[0]) {
-      //   fullCount = 0;
-      // }
+      let fullCount = values[0] && values[0].dataValues.full_count && parseInt(values[0].dataValues.full_count, 10);
 
-      if ((args.first || args.last || args.pageSize) && (fullCount === null || fullCount === undefined)) {
+      if (!values[0]) {
+        fullCount = 0;
+      }
+
+      if (((args.first || args.last) && (fullCount === null || fullCount === undefined)) || args.pageSize) {
         // In case of `OVER()` is not available, we need to get the full count from a second query.
         const options = await Promise.resolve(before({
           where: argsToWhere(args)
@@ -381,12 +380,13 @@ export function sequelizeConnection({
           startCursor: firstEdge ? firstEdge.cursor : null,
           endCursor: lastEdge ? lastEdge.cursor : null,
           hasNextPage: hasNextPage,
-          hasPreviousPage: hasPreviousPage,
+          hasPreviousPage: hasPreviousPage
         },
         totalInfo: {
           total: fullCount,
           totalPage
-        }
+        },
+        fullCount
       }, args, context, info);
     }
   });
